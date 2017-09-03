@@ -7,15 +7,15 @@ node('maven') {
    def v = version()
    sh "${mvnCmd} clean install -DskipTests=true"
    
-   stage 'Test SonarQube'
-   sh "curl http://sonarqube:9000/batch/global"
+   //stage 'Test SonarQube'
+   //sh "curl http://sonarqube:9000/batch/global"
 
-   stage 'Static Ananlysis'
-   sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:report sonar:sonar -Dsonar.host.url=http://sonarqube:9000/ -DskipTests=true"
+   //stage 'Static Ananlysis'
+   //sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:report sonar:sonar -Dsonar.host.url=http://sonarqube:9000/ -DskipTests=true"
    
-   stage 'Test'
-   sh "${mvnCmd} test"
-   step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+   //stage 'Test'
+   //sh "${mvnCmd} test"
+   //step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
    
    stage 'Push to Nexus'
    sh "${mvnCmd} deploy -DskipTests=true"
