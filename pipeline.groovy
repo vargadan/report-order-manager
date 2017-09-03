@@ -17,8 +17,8 @@ node('maven') {
    //sh "${mvnCmd} test"
    //step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
    
-   stage 'Push to Nexus'
-   sh "${mvnCmd} deploy -DskipTests=true"
+   //stage 'Push to Nexus'
+   //sh "${mvnCmd} deploy -DskipTests=true"
 
    stage 'Deploy DEV'
    sh "rm -rf oc-build && mkdir -p oc-build/deployments"
