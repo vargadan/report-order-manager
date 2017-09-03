@@ -28,7 +28,7 @@ node('maven') {
    sh "oc project ${DEV_PROJECT}"
    sh "oc delete bc,dc,svc,route -l app=order-manager -n ${DEV_PROJECT}"
    // create build. override the exit code since it complains about exising imagestream
-   sh "${mvnCmd} fabric8:deploy"
+   sh "${mvnCmd} fabric8:deploy -DskipTests"
 
    stage 'Deploy STAGE'
    input message: "Promote to STAGE?", ok: "Promote"
