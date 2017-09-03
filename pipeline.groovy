@@ -3,7 +3,7 @@ node('maven') {
    def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
 
    stage 'Build'
-   git branch: 'eap-7', url: 'https://github.com/vargadan/report-order-manager.git'
+   git branch: 'master', url: 'https://github.com/vargadan/report-order-manager.git'
    def v = version()
    sh "${mvnCmd} clean install -DskipTests=true"
 
