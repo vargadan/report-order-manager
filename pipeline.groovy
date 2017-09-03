@@ -10,17 +10,13 @@ node('maven') {
    stage 'Test SonarQube'
    sh "curl http://sonarqube:9000/batch/global"
 
-   stage 'Test and Analysis'
-   parallel (
-       'Test': {
-           sh "${mvnCmd} test"
-           step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
-       },
-       'Static Analysis': {
-           sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=http://sonarqube:9000/ -DskipTests=true"
-       }
-   )
-
+   stage 'Static Ananlysis'
+   sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:report sonar:sonar -Dsonar.host.url=http://sonarqube:9000/ -DskipTests=true"
+   
+   stage 'Test'
+   sh "${mvnCmd} test"
+   step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
+   
    stage 'Push to Nexus'
    sh "${mvnCmd} deploy -DskipTests=true"
 
