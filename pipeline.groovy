@@ -6,6 +6,9 @@ node('maven') {
    git branch: 'master', url: 'https://github.com/vargadan/report-order-manager.git'
    def v = version()
    sh "${mvnCmd} clean install -DskipTests=true"
+   
+   stage 'Test SonarQube'
+   sh "curl http://sonarqube:9000/batch/global"
 
    stage 'Test and Analysis'
    parallel (
@@ -14,7 +17,7 @@ node('maven') {
            step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/TEST-*.xml'])
        },
        'Static Analysis': {
-           sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -DskipTests=true"
+           sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:prepare-agent package sonar:sonar -Dsonar.host.url=http://sonarqube:9000/ -DskipTests=true"
        }
    )
 
