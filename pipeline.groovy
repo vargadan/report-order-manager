@@ -1,6 +1,9 @@
 node('maven') {
    // define commands
    def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
+   def DEV_PROJECT = "reportengine-dev"
+   def IT_PROJECT = "reportengine-it"
+   
 
    stage 'Build'
    git branch: 'master', url: 'https://github.com/vargadan/report-order-manager.git'
