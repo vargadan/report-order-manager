@@ -21,8 +21,6 @@ node('maven') {
    //sh "${mvnCmd} deploy -DskipTests=true"
 
    stage 'Deploy DEV'
-   sh "rm -rf oc-build && mkdir -p oc-build/deployments"
-   sh "cp target/order-manager.war oc-build/deployments/ROOT.war"
    // clean up. keep the image stream
    sh "oc project ${DEV_PROJECT}"
    sh "oc delete bc,dc,svc,route -l app=order-manager -n ${DEV_PROJECT}"
