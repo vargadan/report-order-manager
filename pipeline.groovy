@@ -1,6 +1,6 @@
 node('maven') {
    // define commands
-   def mvnCmd = "mvn -s configuration/cicd-settings.xml"
+   def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
 
    stage 'Build'
    git branch: 'eap-7', url: 'https://github.com/vargadan/report-order-manager.git'
