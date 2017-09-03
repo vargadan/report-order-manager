@@ -28,12 +28,7 @@ node('maven') {
    sh "oc project ${DEV_PROJECT}"
    sh "oc delete bc,dc,svc,route -l app=order-manager -n ${DEV_PROJECT}"
    // create build. override the exit code since it complains about exising imagestream
-   sh "oc new-build --name=order-manager --image-stream=jboss-eap70-openshift --binary=true --labels=app=order-manager -n ${DEV_PROJECT} || true"
-   // build image
-   sh "oc start-build order-manager --from-dir=oc-build --wait=true -n ${DEV_PROJECT}"
-   // deploy image
-   sh "oc new-app order-manager:latest -n ${DEV_PROJECT}"
-   sh "oc expose svc/order-manager -n ${DEV_PROJECT}"
+   sh "${mvnCmd} fabric8:deploy"
 
    stage 'Deploy STAGE'
    input message: "Promote to STAGE?", ok: "Promote"
@@ -44,7 +39,7 @@ node('maven') {
    sh "oc delete bc,dc,svc,route -l app=order-manager -n ${IT_PROJECT}"
    // deploy stage image
    sh "oc new-app order-manager:${v} -n ${IT_PROJECT}"
-   sh "oc expose svc/tasorder-managerks -n ${IT_PROJECT}"
+   sh "oc expose svc/order-manager -n ${IT_PROJECT}"
 }
 
 def version() {
