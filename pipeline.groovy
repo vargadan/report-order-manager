@@ -26,7 +26,7 @@ node('maven') {
    stage 'Deploy DEV'
    // clean up. keep the image stream
    sh "oc project ${DEV_PROJECT}"
-   sh "oc delete bc,dc,svc,route -l app=order-manager -n ${DEV_PROJECT}"
+   sh "oc delete bc,dc,svc,route -l app=report-order-manager -n ${DEV_PROJECT}"
    // create build. override the exit code since it complains about exising imagestream
    sh "${mvnCmd} fabric8:deploy -DskipTests"
 
@@ -36,10 +36,10 @@ node('maven') {
    // tag for stage
    sh "oc tag ${DEV_PROJECT}/report-order-manager:latest ${IT_PROJECT}/report-order-manager:${v}"
    // clean up. keep the imagestream
-   sh "oc delete bc,dc,svc,route -l app=order-manager -n ${IT_PROJECT}"
+   sh "oc delete bc,dc,svc,route -l app=report-order-manager -n ${IT_PROJECT}"
    // deploy stage image
-   sh "oc new-app order-manager:${v} -n ${IT_PROJECT}"
-   sh "oc expose svc/order-manager -n ${IT_PROJECT}"
+   sh "oc new-app report-order-manager:${v} -n ${IT_PROJECT}"
+   sh "oc expose svc/report-order-manager -n ${IT_PROJECT}"
 }
 
 def version() {
