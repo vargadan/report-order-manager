@@ -34,7 +34,7 @@ node('maven') {
    input message: "Promote to STAGE?", ok: "Promote"
    sh "oc project ${IT_PROJECT}"
    // tag for stage
-   sh "oc tag ${DEV_PROJECT}/order-manager:latest ${IT_PROJECT}/order-manager:${v}"
+   sh "oc tag ${DEV_PROJECT}/report-order-manager:latest ${IT_PROJECT}/report-order-manager:${v}"
    // clean up. keep the imagestream
    sh "oc delete bc,dc,svc,route -l app=order-manager -n ${IT_PROJECT}"
    // deploy stage image
