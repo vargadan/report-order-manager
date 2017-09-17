@@ -42,13 +42,10 @@ node('maven') {
 	   sh "${mvnCmd} fabric8:deploy -DskipTests"
 	}
 
-   stage ('Deploy STAGE') {
-
+   stage ('Deploy IT') {
      	timeout(time:5, unit:'MINUTES') {
-        		input message: "Promote to STAGE?", ok: "Promote"
+        		input message: "Promote to IT?", ok: "Promote"
         }
-
-
 	   sh "oc project ${IT_PROJECT}"
 	   // tag for stage
 	   sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${IT_PROJECT}/${APP_NAME}:${version}"
