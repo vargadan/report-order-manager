@@ -7,7 +7,7 @@ node('maven') {
    def APP_NAME = "report-order-manager"
 
    stage 'Build'
-   git branch: 'master', url: 'https://github.com/vargadan/${APP_NAME}.git'
+   git branch: 'master', url: 'https://github.com/vargadan/report-order-manager.git'
    def v = version()
    sh "${mvnCmd} clean install -DskipTests=true"
    
