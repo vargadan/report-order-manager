@@ -3,8 +3,6 @@ node('maven') {
    def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
    def DEV_PROJECT = "reportengine-dev"
    def IT_PROJECT = "reportengine-it"
-   def PORT = 8080
-   
 
    stage 'Build'
    git branch: 'master', url: 'https://github.com/vargadan/report-order-manager.git'
@@ -40,7 +38,7 @@ node('maven') {
    sh "oc delete bc,dc,svc,route -l app=report-order-manager -n ${IT_PROJECT}"
    // deploy stage image
    sh "oc new-app report-order-manager:${v} -n ${IT_PROJECT}"
-   sh "oc expose svc/report-order-manager -n ${IT_PROJECT} -p ${PORT}"
+   sh "oc expose svc/report-order-manager -n ${IT_PROJECT} --target-port:8080 --port:8080"
 }
 
 def version() {
