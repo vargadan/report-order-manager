@@ -38,7 +38,7 @@ node('maven') {
    sh "oc delete bc,dc,svc,route -l app=report-order-manager -n ${IT_PROJECT}"
    // deploy stage image
    sh "oc new-app report-order-manager:${v} -n ${IT_PROJECT}"
-   sh "oc expose svc/report-order-manager -n ${IT_PROJECT} --port:8080 "
+   sh "oc expose svc/report-order-manager -n ${IT_PROJECT} --port:8080"
 }
 
 def version() {
