@@ -4,7 +4,7 @@ node('maven') {
    def DEV_PROJECT = "reportengine-dev"
    def IT_PROJECT = "reportengine-it"
    def PORT = 8080
-   sef APP_NAME = "report-order-manager"
+   def APP_NAME = "report-order-manager"
 
    stage 'Build'
    git branch: 'master', url: 'https://github.com/vargadan/${APP_NAME}.git'
