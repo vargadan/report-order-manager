@@ -14,8 +14,8 @@ node('maven') {
    stage 'Test SonarQube'
    sh "curl http://sonarqube:9000/batch/global"
 
-   //stage 'Static Ananlysis'
-   //sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:report sonar:sonar -Dsonar.host.url=http://sonarqube:9000/ -DskipTests=true"
+   stage 'Static Ananlysis'
+   sh "${mvnCmd} org.jacoco:jacoco-maven-plugin:report sonar:sonar -Dsonar.host.url=http://sonarqube:9000/ -DskipTests=true"
    
    //stage 'Test'
    //sh "${mvnCmd} test"
