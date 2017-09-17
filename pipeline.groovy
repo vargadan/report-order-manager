@@ -3,9 +3,11 @@ node('maven') {
    def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
    def DEV_PROJECT = "reportengine-dev"
    def IT_PROJECT = "reportengine-it"
+   def PORT = 8080
+   sef APP_NAME = "report-order-manager"
 
    stage 'Build'
-   git branch: 'master', url: 'https://github.com/vargadan/report-order-manager.git'
+   git branch: 'master', url: 'https://github.com/vargadan/${APP_NAME}.git'
    def v = version()
    sh "${mvnCmd} clean install -DskipTests=true"
    
@@ -25,7 +27,7 @@ node('maven') {
    stage 'Deploy DEV'
    // clean up. keep the image stream
    sh "oc project ${DEV_PROJECT}"
-   sh "oc delete bc,dc,svc,route -l app=report-order-manager -n ${DEV_PROJECT}"
+   sh "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${DEV_PROJECT}"
    // create build. override the exit code since it complains about exising imagestream
    sh "${mvnCmd} fabric8:deploy -DskipTests"
 
@@ -33,13 +35,17 @@ node('maven') {
    input message: "Promote to STAGE?", ok: "Promote"
    sh "oc project ${IT_PROJECT}"
    // tag for stage
-   sh "oc tag ${DEV_PROJECT}/report-order-manager:latest ${IT_PROJECT}/report-order-manager:${v}"
+   sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${IT_PROJECT}/${APP_NAME}:${v}"
    // clean up. keep the imagestream
-   sh "oc delete bc,dc,svc,route -l app=report-order-manager -n ${IT_PROJECT}"
+   sh "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
    // deploy stage image
-   sh "oc new-app report-order-manager:${v} -n ${IT_PROJECT}" 
-   sh "oc expose dc report-order-manager -n ${IT_PROJECT} --port=8080"
-   sh "oc expose svc report-order-manager -n ${IT_PROJECT} --port=8080"
+   sh "oc new-app ${APP_NAME}:${v} -n ${IT_PROJECT}" 
+   // delete service and route because new-app created them with wrong port
+   sh "oc delete svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
+   // create service with the right port 
+   sh "oc expose dc ${APP_NAME} --port=${PORT}"
+   // create route with the right port
+   sh "oc expose svc ${APP_NAME}"
 }
 
 def version() {
