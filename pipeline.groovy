@@ -1,16 +1,17 @@
 node('maven') {
-   // define commands
-   def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
-   def DEV_PROJECT = "reportengine-dev"
-   def IT_PROJECT = "reportengine-it"
-   def PORT = 8080
-   def APP_NAME = "report-order-manager"
+   	// define commands
+   	def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
+   	def DEV_PROJECT = "reportengine-dev"
+   	def IT_PROJECT = "reportengine-it"
+   	def PORT = 8080
+   	def APP_NAME = "report-order-manager"
 
    	stage ('Build') {
    		git branch: 'master', url: 'https://github.com/vargadan/report-order-manager.git'
-   		def v = version()
    		sh "${mvnCmd} clean install -DskipTests=true"
    	}
+   	
+   	def version = version()
    
  //  	stage ('Test SonarQube') {
  //  		sh "curl http://sonarqube:9000/batch/global"
@@ -50,11 +51,11 @@ node('maven') {
 
 	   sh "oc project ${IT_PROJECT}"
 	   // tag for stage
-	   sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${IT_PROJECT}/${APP_NAME}:${v}"
+	   sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${IT_PROJECT}/${APP_NAME}:${version}"
 	   // clean up. keep the imagestream
 	   sh "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
 	   // deploy stage image
-	   sh "oc new-app ${APP_NAME}:${v} -n ${IT_PROJECT}" 
+	   sh "oc new-app ${APP_NAME}:${version} -n ${IT_PROJECT}" 
 	   // delete service and route because new-app created them with wrong port
 	   sh "oc delete svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
 	   // create service with the right port 
