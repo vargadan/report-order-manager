@@ -3,7 +3,7 @@ node('maven') {
    def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
    def DEV_PROJECT = "reportengine-dev"
    def IT_PROJECT = "reportengine-it"
-   def port = 8080
+   def PORT = 8080
    
 
    stage 'Build'
