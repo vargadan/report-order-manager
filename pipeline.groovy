@@ -29,9 +29,9 @@ node('maven') {
    		)
    	}
    
-   	stage ('Push to Nexus') {
-   		sh "${mvnCmd} deploy -DskipTests=true"
-   	}
+ //  	stage ('Push to Nexus') {
+ //  		sh "${mvnCmd} deploy -DskipTests=true"
+ //  	}
 
    	stage ('Deploy DEV') {
 	   // clean up. keep the image stream
