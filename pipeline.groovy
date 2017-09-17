@@ -3,6 +3,7 @@ node('maven') {
    def mvnCmd = "mvn -s configuration/maven-cicd-settings.xml"
    def DEV_PROJECT = "reportengine-dev"
    def IT_PROJECT = "reportengine-it"
+   def port = 8080
    
 
    stage 'Build'
@@ -39,7 +40,7 @@ node('maven') {
    sh "oc delete bc,dc,svc,route -l app=report-order-manager -n ${IT_PROJECT}"
    // deploy stage image
    sh "oc new-app report-order-manager:${v} -n ${IT_PROJECT}"
-   sh "oc expose svc/report-order-manager -n ${IT_PROJECT}"
+   sh "oc expose svc/report-order-manager -n ${IT_PROJECT} -p ${PORT}"
 }
 
 def version() {
