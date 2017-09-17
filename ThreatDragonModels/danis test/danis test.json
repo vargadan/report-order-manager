@@ -1,0 +1,17 @@
+{
+  "summary": {
+    "title": "danis test",
+    "owner": "daniel varga",
+    "description": "danis test"
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "title": "hello",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 0
+      }
+    ]
+  }
+}
