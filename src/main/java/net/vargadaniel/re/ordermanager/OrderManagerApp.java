@@ -19,7 +19,7 @@ import static springfox.documentation.builders.PathSelectors.*;
 public class OrderManagerApp {
 
 	public static void main(String... args) {
-		System.setProperty("spring.profiles.active", "hello")
+		System.setProperty("spring.profiles.active", "hello");
 		SpringApplication.run(OrderManagerApp.class, args);
 	}
 
