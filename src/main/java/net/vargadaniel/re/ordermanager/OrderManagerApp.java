@@ -18,7 +18,8 @@ import static springfox.documentation.builders.PathSelectors.*;
 @EnableSwagger2
 public class OrderManagerApp {
 
-	public static void main(String[] args) {
+	public static void main(String... args) {
+		System.setProperty("spring.profiles.active", "hello")
 		SpringApplication.run(OrderManagerApp.class, args);
 	}
 
