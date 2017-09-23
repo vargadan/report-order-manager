@@ -1,7 +1,24 @@
-profiles: default, dev
 spring:
    application:
       name: report-order-manager
    cloud:
       config:
          uri: http://report-config-server:8080/
+      stream:
+         bindings:
+            products:
+               destination: productsTopic
+               content-type: application/json
+               group: report-factory
+            orders:
+               destination: ordersTopic
+               content-type: application/json
+               group: report-factory
+            statusUpdates:
+               destination: statusUpdatesTopic
+               content-type: application/json
+               group: report-factory
+            rabbit:
+               binder:
+                  nodes: rabbitmq
+                  adminAddresses: rabbitmq
