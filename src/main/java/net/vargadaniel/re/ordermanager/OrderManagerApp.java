@@ -21,7 +21,7 @@ public class OrderManagerApp {
 	public static void main(String... args) {
 		String k8sNamespace = System.getenv("KUBERNETES_NAMESPACE");
 		if (k8sNamespace != null) {
-			String profile = k8sNamespace.substring(k8sNamespace.lastIndexOf("-"));
+			String profile = k8sNamespace.substring(k8sNamespace.lastIndexOf("-") + 1);
 			System.setProperty("spring.profiles.active", profile);
 		}
 		SpringApplication.run(OrderManagerApp.class, args);
