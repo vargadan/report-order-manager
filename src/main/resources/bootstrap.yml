@@ -1,3 +1,4 @@
+profiles: default, dev
 spring:
    application:
       name: report-order-manager
