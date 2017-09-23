@@ -1,9 +1,7 @@
-profiles: default
+profiles: default, dev
 spring:
    application:
       name: report-order-manager
-   profiles:
-    active: default, dev
    cloud:
       config:
          uri: http://report-config-server:8080/
