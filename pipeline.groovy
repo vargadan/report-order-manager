@@ -17,7 +17,7 @@ node('maven') {
  //  		sh "curl http://sonarqube:9000/batch/global"
  //  	}
 
-   
+/*  
    	stage ('Test and Analisys') {
    		parallel ( 
    			'Test' : { 
@@ -29,7 +29,7 @@ node('maven') {
    			}   			
    		)
    	}
-   
+ */  
  //  	stage ('Push to Nexus') {
  //  		sh "${mvnCmd} deploy -DskipTests=true"
  //  	}
