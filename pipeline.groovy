@@ -35,7 +35,7 @@ node('maven') {
  //  	}
 
    	stage ('Deploy DEV') {
-	   // clean up. keep the image stream
+	   // clean up. keep the image stream 
 	   sh "oc project ${DEV_PROJECT}"
 	   sh "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${DEV_PROJECT}"
 	   // create build. override the exit code since it complains about exising imagestream
