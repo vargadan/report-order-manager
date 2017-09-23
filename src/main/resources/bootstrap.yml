@@ -1,5 +1,8 @@
 spring:
-   profiles: default, dev
+   profiles:
+    active:
+    - dev
+    - default
    application:
       name: report-order-manager
    cloud:
