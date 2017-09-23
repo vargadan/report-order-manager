@@ -1,0 +1,7 @@
+profiles: default
+spring:
+   application:
+      name: report-order-manager
+   cloud:
+      config:
+         uri: http://report-config-server:8080/
