@@ -19,7 +19,11 @@ import static springfox.documentation.builders.PathSelectors.*;
 public class OrderManagerApp {
 
 	public static void main(String... args) {
-		System.setProperty("spring.profiles.active", "hello");
+		String k8sNamespace = System.getenv("KUBERNETES_NAMESPACE");
+		if (k8sNamespace != null) {
+			String profile = k8sNamespace.substring(k8sNamespace.lastIndexOf("-"));
+			System.setProperty("spring.profiles.active", profile);
+		}
 		SpringApplication.run(OrderManagerApp.class, args);
 	}
 
