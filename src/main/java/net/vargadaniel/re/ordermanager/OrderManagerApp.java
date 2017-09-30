@@ -3,6 +3,7 @@ package net.vargadaniel.re.ordermanager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 import com.google.common.base.Predicate;
 
@@ -16,6 +17,7 @@ import static springfox.documentation.builders.PathSelectors.*;
 
 @SpringBootApplication
 @EnableSwagger2
+@EnableResourceServer
 public class OrderManagerApp {
 
 	public static void main(String... args) {
