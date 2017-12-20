@@ -40,22 +40,22 @@ node('maven') {
 	}
 
    stage ('Deploy IT') {
-     	timeout(time:5, unit:'MINUTES') {
-        		input message: "Promote to IT?", ok: "Promote"
-        }
-	   sh "oc project ${IT_PROJECT}"
+    // 	timeout(time:5, unit:'MINUTES') {
+    //    		input message: "Promote to IT?", ok: "Promote"
+    //    }
+	//   sh "oc project ${IT_PROJECT}"
 	   // tag for stage
 	   sh "oc tag ${DEV_PROJECT}/${APP_NAME}:latest ${IT_PROJECT}/${APP_NAME}:${version}"
 	   // clean up. keep the imagestream
-	   sh "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
+	//	   sh "oc delete bc,dc,svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
 	   // deploy stage image
-	   sh "oc new-app ${APP_NAME}:${version} -n ${IT_PROJECT}" 
+	//   sh "oc new-app ${APP_NAME}:${version} -n ${IT_PROJECT}" 
 	   // delete service and route because new-app created them with wrong port
-	   sh "oc delete svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
+	//   sh "oc delete svc,route -l app=${APP_NAME} -n ${IT_PROJECT}"
 	   // create service with the right port 
-	   sh "oc expose dc ${APP_NAME} --port=${PORT}"
+	//   sh "oc expose dc ${APP_NAME} --port=${PORT}"
 	   // create route with the right port
-	   sh "oc expose svc ${APP_NAME}"
+	//   sh "oc expose svc ${APP_NAME}"
 	}
 }
 
