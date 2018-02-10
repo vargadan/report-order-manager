@@ -3,7 +3,7 @@ package net.vargadaniel.re.ordermanager.vo;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class StatusUpdate {
+public class StatusUpdateVO {
 	
 	@Override
 	public String toString() {
@@ -29,5 +29,4 @@ public class StatusUpdate {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 }

@@ -1,7 +1,5 @@
 package net.vargadaniel.re.ordermanager.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -9,11 +7,9 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
 public class OrderStatus implements Comparable<OrderStatus>{
 	
-	public OrderStatus(Order order, Long timestamp, String status) {
-		this.order = order;
+	public OrderStatus(Long timestamp, String status) {
 		this.timestamp = timestamp;
 		this.status = status;
 	}
@@ -22,8 +18,6 @@ public class OrderStatus implements Comparable<OrderStatus>{
 	}
 
 	private Long id;
-	
-	private Order order;
 	
 	private Long timestamp;
 	
@@ -39,18 +33,7 @@ public class OrderStatus implements Comparable<OrderStatus>{
 		this.id = id;
 	}
 
-	@ManyToOne(optional=false)
-	@JsonIgnore
-	public Order getOrder() {
-		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
-	}
-
 	@NotNull
-	@Column(updatable=false)
 	public Long getTimestamp() {
 		return timestamp;
 	}
@@ -60,7 +43,6 @@ public class OrderStatus implements Comparable<OrderStatus>{
 	}
 
 	@NotNull
-	@Column(updatable=false)
 	public String getStatus() {
 		return status;
 	}
@@ -74,7 +56,6 @@ public class OrderStatus implements Comparable<OrderStatus>{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((order == null) ? 0 : order.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
 		return result;
@@ -89,11 +70,6 @@ public class OrderStatus implements Comparable<OrderStatus>{
 		if (getClass() != obj.getClass())
 			return false;
 		OrderStatus other = (OrderStatus) obj;
-		if (order == null) {
-			if (other.order != null)
-				return false;
-		} else if (!order.equals(other.order))
-			return false;
 		if (status == null) {
 			if (other.status != null)
 				return false;

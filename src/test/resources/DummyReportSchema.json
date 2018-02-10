@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Dummy Report Order",
+    "description": "An Order for a Dummy Tax Report",
+    "type": "object",
+    "properties": {
+        "cif": {
+            "description": "customer identifier",
+            "type": "string"
+        },
+        "from": {
+            "description": "start date of report period",
+            "type": "string"
+        },
+        "to": {
+            "description": "end date of report period",
+            "type": "string"
+        }
+    },
+    "required": ["cif", "from", "to"]
+}

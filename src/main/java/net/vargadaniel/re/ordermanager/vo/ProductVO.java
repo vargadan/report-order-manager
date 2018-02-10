@@ -1,26 +1,24 @@
-package net.vargadaniel.re.ordermanager.model;
+package net.vargadaniel.re.ordermanager.vo;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.springframework.data.annotation.Id;
 
-import com.mongodb.DBObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
-public class Product {
+public class ProductVO {
 	
-	public Product(String name) {
+	public ProductVO(String name) {
 		this.name = name;
 	}
 
-	public Product() {
+	public ProductVO() {
 	}
-
-	@Id
+	
 	private String id;
 
 	private String name;
 	
-    private DBObject propertiesSchema;
+    private JsonNode propertiesSchema;
     
 	public String getId() {
 		return id;
@@ -43,11 +41,11 @@ public class Product {
 		return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
 	}
 
-	public DBObject getPropertiesSchema() {
+	public JsonNode getPropertiesSchema() {
 		return propertiesSchema;
 	}
 
-	public void setPropertiesSchema(DBObject propertiesSchema) {
+	public void setPropertiesSchema(JsonNode propertiesSchema) {
 		this.propertiesSchema = propertiesSchema;
 	}
 	

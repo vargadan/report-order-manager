@@ -1,5 +1,6 @@
 package net.vargadaniel.re.ordermanager;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,15 +15,17 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.mongodb.util.JSON;
 
 import net.vargadaniel.re.ordermanager.OrderManagerApp;
 import net.vargadaniel.re.ordermanager.OrderRestController;
 import net.vargadaniel.re.ordermanager.OrderStreamListener;
-import net.vargadaniel.re.ordermanager.model.Order;
-import net.vargadaniel.re.ordermanager.model.Product;
+import net.vargadaniel.re.ordermanager.vo.Converter;
+import net.vargadaniel.re.ordermanager.vo.OrderVO;
+import net.vargadaniel.re.ordermanager.vo.ProductVO;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OrderManagerApp.class)
@@ -32,26 +35,28 @@ public class OrderControllerRestTest {
 	MockMvc mockMvc;
 	
 	@Autowired
-	OrderRestController orderController;
+	private OrderRestController orderController;
 	
 	@Autowired
-	OrderStreamListener orderListener;
+	private OrderStreamListener orderListener;
 	
-	Product product;
+	ProductVO product;
 	
 	@Before
-	public void init() {
-		orderListener.registerProduct(new Product("hello-product"));
-		product = orderController.findProductByName("hello-product");
-		
+	public void init() throws Exception {
+		product = TestDataFactory.createDummyReportProduct();
+		orderListener.registerProduct(product);
+		product = orderController.findAllProducts().iterator().next();
 		mockMvc = MockMvcBuilders.standaloneSetup(orderController).build();
 	}
 	
 	@Test
 	public void testOrderCreate() throws Exception {
-		Order order = new Order(null, product);
-		MvcResult result = mockMvc.perform(post("/orders").contentType(MediaType.APPLICATION_JSON).content(asJsonString(order))).andReturn();
-		Order resultOrder = asObject(result.getResponse().getContentAsByteArray(), Order.class);
+		OrderVO order = new OrderVO(null, product);
+		order.setProperties(Converter.toJsonNode("{\"from\":\"01/01/2016\",\"to\":\"31/12/2016\",\"cif\":\"1234567890\"}"));
+		String orderJson = asJsonString(order);
+		MvcResult result = mockMvc.perform(post("/orders").contentType(MediaType.APPLICATION_JSON).content(orderJson)).andReturn();
+		OrderVO resultOrder = asObject(result.getResponse().getContentAsByteArray(), OrderVO.class);
 		Assert.assertNotNull(resultOrder);
 		Assert.assertNotNull(resultOrder.getTimestamp());
 		Assert.assertNotNull(resultOrder.getStatuses());
@@ -78,5 +83,13 @@ public class OrderControllerRestTest {
             throw new RuntimeException(e);
         }
     }
+
+	@Autowired
+	private CleanupManager cleanupManager; 
+    
+	@After
+	public void cleanUp() {
+		cleanupManager.cleanUpAll();
+	}
 	
 }

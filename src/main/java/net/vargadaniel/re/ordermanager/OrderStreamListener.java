@@ -10,7 +10,9 @@ import org.springframework.messaging.Message;
 import net.vargadaniel.re.ordermanager.model.Order;
 import net.vargadaniel.re.ordermanager.model.OrderStatus;
 import net.vargadaniel.re.ordermanager.model.Product;
-import net.vargadaniel.re.ordermanager.vo.StatusUpdate;
+import net.vargadaniel.re.ordermanager.vo.Converter;
+import net.vargadaniel.re.ordermanager.vo.ProductVO;
+import net.vargadaniel.re.ordermanager.vo.StatusUpdateVO;
 
 @EnableBinding(ReportEngine.class)
 public class OrderStreamListener {
@@ -26,21 +28,25 @@ public class OrderStreamListener {
 	@Autowired
 	ReportEngine reportEngine;	
 	
+	@Autowired
+	OrderValidator validator;
+	
 	@StreamListener(ReportEngine.PRODUCTS)
-	public void registerProduct(Product newProduct) {
-		Product oldProduct = productRepository.findByName(newProduct.getName());
-		if (oldProduct == null) {
-			productRepository.save(newProduct);
+	public void registerProduct(ProductVO productVO) {
+		if (productRepository.findByName(productVO.getName()) == null) {
+			Product product = Converter.converProduct(productVO);
+			validator.validate(product);
+			productRepository.save(product);
 		}
 	}
 	
 	@StreamListener(ReportEngine.STATUS_UPDATES)
-	public void updateStatus(Message<StatusUpdate> statusUpdateMsg) {
-		StatusUpdate statusUpdate = statusUpdateMsg.getPayload();
+	public void updateStatus(Message<StatusUpdateVO> statusUpdateMsg) {
+		StatusUpdateVO statusUpdate = statusUpdateMsg.getPayload();
 		log.info("statusUpdate : " + statusUpdate);
-		Order order = orderRepository.findOne(Long.valueOf(statusUpdate.getOrderId()));
+		Order order = orderRepository.findOne(statusUpdate.getOrderId());
 		Long timestamp = statusUpdateMsg.getHeaders().getTimestamp();
-		order.getStatuses().add(new OrderStatus(order, timestamp, statusUpdate.getStatus()));
+		order.getStatuses().add(new OrderStatus(timestamp, statusUpdate.getStatus()));
 		orderRepository.save(order);
 	}
 
