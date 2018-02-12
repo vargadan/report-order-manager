@@ -9,10 +9,14 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderValidator {
+	
+	static Logger log = LoggerFactory.getLogger(OrderValidator.class);
 	
 	private ValidatorFactory validatorFactory;
 	
@@ -25,6 +29,9 @@ public class OrderValidator {
 		Validator validator = validatorFactory.getValidator();
 		Set<ConstraintViolation<T>> validationResuts = validator.validate(object);
 		if (!validationResuts.isEmpty()) {
+			for (ConstraintViolation<T> r : validationResuts) {
+				log.error(r.getMessage());
+			}
 			throw new ConstraintViolationException(validationResuts);
 		}		
 	}	
