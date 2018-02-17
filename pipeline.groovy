@@ -13,6 +13,7 @@ node('maven') {
   	stage ('Build & Test') {
    		git branch: 'master', url: "${GIT_URL}"
    		sh "${mvnCmd} clean package -DskipTests=${SKIP_TEST} fabric8:build"
+   		sh "cat /var/run/secrets/kubernetes.io/serviceaccount/token"
    	}
    	
    	def version = version()
