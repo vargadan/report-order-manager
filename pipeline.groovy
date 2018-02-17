@@ -11,11 +11,6 @@ node('maven') {
    	def SKIP_TEST = "false"
  
   	stage ('Build & Test') {
-   		SATOKEN = sh (
-   			script: "cat /var/run/secrets/kubernetes.io/serviceaccount/token"
-   			returnStdout: true
-   		).trim()
-   		echo "SATOKEN : ${SATOKEN}"
    		git branch: 'master', url: "${GIT_URL}"
    		sh "${mvnCmd} clean package -DskipTests=${SKIP_TEST} fabric8:build"
    	}
